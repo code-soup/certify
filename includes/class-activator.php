@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB;
+namespace CodeSoup\Certify;
 
 // Exit if accessed directly.
 defined( 'WPINC' ) || die;
@@ -15,6 +15,10 @@ defined( 'WPINC' ) || die;
 class Activator {
 
     public static function activate() {
-        // Put code that you want to run on activation in here.
+
+        $administrator = get_role('administrator');
+        $administrator->add_cap('manage_certify');
+
+        error_log( print_r($administrator, true) );
     }
 }

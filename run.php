@@ -13,7 +13,7 @@ require "vendor/autoload.php";
  */
 function certify() {
 
-    return CS\Certify\Init::get_instance();
+    return CodeSoup\Certify\Init::get_instance();
 }
 
 // Init plugin and make instance globally available

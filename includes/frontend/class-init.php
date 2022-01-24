@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB\Frontend;
+namespace CodeSoup\Certify\Frontend;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -15,7 +15,7 @@ defined( 'WPINC' ) || die;
 class Init {
 
 
-    use \WPPB\Traits\HelpersTrait;
+    use \CodeSoup\Certify\Traits\HelpersTrait;
 
 
     // Main plugin instance
@@ -34,7 +34,7 @@ class Init {
     public function __construct() {
 
         // Main plugin instance
-        $instance     = wppb();
+        $instance     = certify();
         $hooker       = $instance->get_hooker();
         $this->assets = $instance->get_assets();
 

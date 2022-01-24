@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB;
+namespace CodeSoup\Certify;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -33,8 +33,8 @@ final class Init {
 		'MIN_WP_VERSION'               => '5.0',
 		'MIN_PHP_VERSION'              => '7.1',
 		'MIN_MYSQL_VERSION'            => '5.0.0',
-		'PLUGIN_PREFIX'                => 'WPPB',
-		'PLUGIN_NAME'                  => 'WordPress Plugin Boilerplate',
+		'PLUGIN_PREFIX'                => 'CERTIFY',
+		'PLUGIN_NAME'                  => 'Certify',
 		'PLUGIN_VERSION'               => '1.0.0',
 	);
 
@@ -129,7 +129,10 @@ final class Init {
 		new Admin\Init();
 
 		// Public related stuff.
-		new Frontend\Init();
+		// new Frontend\Init();
+
+		// REST API handler
+		new RestApi\Init();
 
 		// Run all hooks
 		$this->run();

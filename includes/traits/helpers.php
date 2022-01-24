@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB\Traits;
+namespace CodeSoup\Certify\Traits;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;

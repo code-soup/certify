@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB;
+namespace CodeSoup\Certify;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;

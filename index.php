@@ -35,7 +35,7 @@ defined( 'WPINC' ) || die;
 register_activation_hook( __FILE__, function() {
 
     // On activate do this
-    CS\Certify\Activator::activate();
+    CodeSoup\Certify\Activator::activate();
 });
 
 
@@ -47,7 +47,7 @@ register_activation_hook( __FILE__, function() {
 register_deactivation_hook( __FILE__, function () {
     
     // On deactivate do that
-    CS\Certify\Deactivator::deactivate();
+    CodeSoup\Certify\Deactivator::deactivate();
 });
 
 
