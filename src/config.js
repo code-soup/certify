@@ -26,7 +26,7 @@ module.exports = {
     // URL to root folder on web server
     // This is very important line, most common reason why things break
     // because paths to files are determined by this
-    publicPath: "/wp-content/plugins/wppb",
+    publicPath: "/certify/wp-content/plugins/certify",
     // production path to /dist folder, if different from 
     publicPathProd: "/wp-content/plugins/wppb",
     // localhost or custom host name

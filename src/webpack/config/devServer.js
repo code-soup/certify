@@ -10,7 +10,6 @@ if (url.parse(config.devHost).protocol === 'https:') {
 
 const options = {
     devServer: {
-        http2: true,
         compress: true,
         allowedHosts: 'all',
         devMiddleware: {

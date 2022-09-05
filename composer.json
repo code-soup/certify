@@ -1,11 +1,11 @@
 {
-	"name": "codesoup/wppb",
+	"name": "codesoup/certify",
 	"description": "WordPress Plugin Boilerplate",
-	"homepage": "https://github.com/code-soup/wordpress-plugin-boilerplate",
+	"homepage": "https://github.com/code-soup/certify",
     "type": "wordpress-plugin",
     "license": "GPL-3.0",
     "support": {
-        "issues": "https://github.com/code-soup/wordpress-plugin-boilerplate/issues"
+        "issues": "https://github.com/code-soup/certify/issues"
     },
 	"authors": [
 		{
@@ -20,7 +20,6 @@
         }
 	],
 	"keywords": [
-        "wppb",
 		"wordpress",
         "wordpress plugin",
         "wordpress plugin license manager"
@@ -29,13 +28,18 @@
         "classmap": ["includes/"]
     },
 	"require": {
-		"php": ">=7.3.0",
-		"composer/installers": "~1.0",
-		"vlucas/phpdotenv": "^5.3"
+		"php": ">=7.4.0",
+		"composer/installers": "^2.2",
+		"vlucas/phpdotenv": "^5.4"
 	},
 	"extra": {
 		"installer-paths": {
 			"vendor/{$name}": ["vendor/package"]
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"composer/installers": true
 		}
 	}
 }

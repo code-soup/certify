@@ -24,6 +24,7 @@
 // If this file is called directly, abort.
 defined( 'WPINC' ) || die;
 
+
 /**
  * NOTE: Activation hooks need to be inside index.php file or it might not work properly
  * It can fail without error, WordPress is silently failing in case of error
