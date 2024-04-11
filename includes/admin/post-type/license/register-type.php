@@ -1,0 +1,63 @@
+<?php
+
+// Exit if accessed directly
+defined( 'WPINC' ) || die;
+
+$labels = array(
+    'name'                  => _x( 'License', 'Post type general name', 'certify' ),
+    'singular_name'         => _x( 'License', 'Post type singular name', 'certify' ),
+    'menu_name'             => _x( 'License', 'Admin Menu text', 'certify' ),
+    'name_admin_bar'        => _x( 'License', 'Add New on Toolbar', 'certify' ),
+    'add_new'               => __( 'Add New', 'certify' ),
+    'add_new_item'          => __( 'Add New License', 'certify' ),
+    'new_item'              => __( 'New License', 'certify' ),
+    'edit_item'             => __( 'Edit License', 'certify' ),
+    'view_item'             => __( 'View License', 'certify' ),
+    'all_items'             => __( 'All Licenses', 'certify' ),
+    'search_items'          => __( 'Search Licenses', 'certify' ),
+    'parent_item_colon'     => __( 'Parent License:', 'certify' ),
+    'not_found'             => __( 'No License found.', 'certify' ),
+    'not_found_in_trash'    => __( 'No License found in Trash.', 'certify' ),
+    'featured_image'        => _x( 'License Cover Image', 'Overrides the “Featured Image” phrase for this post type.', 'certify' ),
+    'set_featured_image'    => _x( 'Set cover image', 'Overrides the “Set featured image” phrase for this post type.', 'certify' ),
+    'remove_featured_image' => _x( 'Remove cover image', 'Overrides the “Remove featured image” phrase for this post type.', 'certify' ),
+    'use_featured_image'    => _x( 'Use as cover image', 'Overrides the “Use as featured image” phrase for this post type.', 'certify' ),
+    'archives'              => _x( 'License archives', 'The post type archive label used in nav menus. Default “Post Archives”.', 'certify' ),
+    'insert_into_item'      => _x( 'Insert into License', 'Overrides the “Insert into post”/”Insert into page” phrase (used when inserting media into a post).', 'certify' ),
+    'uploaded_to_this_item' => _x( 'Uploaded to this License', 'Overrides the “Uploaded to this post”/”Uploaded to this page” phrase (used when viewing media attached to a post).', 'certify' ),
+    'filter_items_list'     => _x( 'Filter License list', 'Screen reader text for the filter links heading on the post type listing screen. Default “Filter posts list”/”Filter pages list”.', 'certify' ),
+    'items_list_navigation' => _x( 'License list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default “Posts list navigation”/”Pages list navigation”.', 'certify' ),
+    'items_list'            => _x( 'License list', 'Screen reader text for the items list heading on the post type listing screen. Default “Posts list”/”Pages list”.', 'certify' ),
+);
+
+return array(
+	'can_export'           => false,
+	'capability_type'      => 'certify',
+	'delete_with_user'     => false,
+	'description'          => _x( 'Licenses', 'Post type description', 'certify' ),
+	'exclude_from_search'  => true,
+	'has_archive'          => false,
+	'hierarchical'         => true,
+	'labels'               => $labels,
+	'menu_icon'            => 'dashicons-tickets',
+	'menu_position'        => 94,
+	'public'               => false,
+	'publicly_queryable'   => false,
+	'query_var'            => false,
+	'show_in_admin_bar'    => false,
+	'show_in_menu'         => 'certify',
+	'show_in_nav_menus'    => false,
+	'show_in_rest'         => false,
+	'show_ui'              => true,
+	'supports'             => array( 'title' ),
+	'register_meta_box_cb' => array( $this, 'register_meta_box' ),
+	'capabilities' => array(
+        'edit_post'              => 'edit_certify',
+        'read_post'              => 'read_certify',
+        'delete_post'            => 'delete_certify',
+        'edit_posts'             => 'edit_certifies',
+        'edit_others_posts'      => 'edit_others_certifies',
+        'publish_posts'          => 'publish_certifies',
+        'read_private_posts'     => 'read_private_certifies',
+    ),
+);

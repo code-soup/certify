@@ -2,39 +2,43 @@
 	"name": "codesoup/certify",
 	"description": "WordPress Plugin Boilerplate",
 	"homepage": "https://github.com/code-soup/certify",
-    "type": "wordpress-plugin",
-    "license": "GPL-3.0",
-    "support": {
-        "issues": "https://github.com/code-soup/certify/issues"
-    },
+	"type": "wordpress-plugin",
+	"license": "GPL-3.0",
+	"support": {
+		"issues": "https://github.com/code-soup/certify/issues"
+	},
 	"authors": [
 		{
 			"name": "Vlado Bosnjak",
 			"email": "vb@bobz.co",
 			"homepage": "https://www.bobz.co"
 		},
-        {
-            "name": "Code Soup",
-            "email": "hi@codesoup.co",
-            "homepage": "https://www.codesoup.co"
-        }
+		{
+			"name": "Code Soup",
+			"email": "hi@codesoup.co",
+			"homepage": "https://www.codesoup.co"
+		}
 	],
 	"keywords": [
 		"wordpress",
-        "wordpress plugin",
-        "wordpress plugin license manager"
+		"wordpress plugin",
+		"wordpress plugin license manager"
 	],
-    "autoload": {
-        "classmap": ["includes/"]
-    },
+	"autoload": {
+		"classmap": [
+			"includes/"
+		]
+	},
 	"require": {
-		"php": ">=7.4.0",
+		"php": ">=8.1.0",
 		"composer/installers": "^2.2",
 		"vlucas/phpdotenv": "^5.4"
 	},
 	"extra": {
 		"installer-paths": {
-			"vendor/{$name}": ["vendor/package"]
+			"vendor/{$name}": [
+				"vendor/package"
+			]
 		}
 	},
 	"config": {

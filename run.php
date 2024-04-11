@@ -17,7 +17,7 @@ function certify() {
 }
 
 // Init plugin and make instance globally available
-$certify = certify();
-$certify->init();
+$plugin = certify();
+$plugin->init();
 
-$GLOBALS['certify'] = $certify;
+$GLOBALS['certify'] = $plugin;

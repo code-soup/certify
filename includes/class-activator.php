@@ -17,8 +17,23 @@ class Activator {
     public static function activate() {
 
         $administrator = get_role('administrator');
-        $administrator->add_cap('manage_certify');
 
-        error_log( print_r($administrator, true) );
+        if ( ! empty($administrator) ) {
+
+            $caps = array(
+                'edit_certify',
+                'read_certify',
+                'manage_certify',
+                'delete_certify',
+                'edit_certifies',
+                'edit_others_certifies',
+                'publish_certifies',
+                'read_private_certifies',
+            );
+
+            foreach( $caps as $cap ) {
+                $administrator->add_cap($cap, true);
+            }
+        }
     }
 }

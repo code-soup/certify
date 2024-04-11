@@ -2,6 +2,8 @@
 
 namespace CodeSoup\Certify\RestApi\Controllers;
 
+use CodeSoup\Certify\Admin\License;
+
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
@@ -71,7 +73,10 @@ class Certify {
 
     public function create_license( \WP_REST_Request $request ) {
 
-        return rest_ensure_response(true);
+        $licence = new License;
+        $data = $licence->create( (array) $request->get_params() );
+
+        return rest_ensure_response( $data );
     }
 
 
@@ -82,7 +87,7 @@ class Certify {
      */
     public function validate_license( \WP_REST_Request $request ) {
 
-        return rest_ensure_response(true);
+        return rest_ensure_response($request);
     }
 
 

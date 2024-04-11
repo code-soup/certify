@@ -1,5 +1,3 @@
-/** Import config */
+@import '_utils/_require-dev-build-wp-admin';
 
-@import "config/config.scss";
-@import "common/grid.scss";
-@import "common/metabox.scss";
+@import 'components/metabox/index';

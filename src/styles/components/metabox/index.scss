@@ -1,0 +1,75 @@
+.metabox-code-soup {
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        @include input-placeholder {
+            opacity: 0.5;
+        }
+    }
+
+    p,
+    ul,
+    ol {
+        margin: 0;
+    }
+
+    select {
+        width: 100%;
+    }
+
+    .row > div > p,
+    .row > div > ul,
+    .row > div > ol {
+        padding-top: 5px;
+    }
+
+    .input-label {
+        font-weight: 400;
+    }
+
+    .input-radio {
+        line-height: 30px;
+    }
+
+    .row {
+        width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+        padding-top: 5px;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .row + .row {
+        margin-top: 15px;
+    }
+
+    .description {
+        display: block;
+        padding: 5px 0 0;
+        color: #999;
+    }
+
+    .description-block {
+        display: block;
+    }
+
+    .inner-row {
+        display: flex;
+        width: 100%;
+    }
+
+    .span-6 {
+        width: calc(50% - 8px);
+    }
+
+    .span-12 {
+        width: 100%;
+    }
+}

@@ -1,4 +1,4 @@
-## WordPress Plugin Boilerplate
+## Certify
 
 
 ## Issues
