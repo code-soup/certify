@@ -32,7 +32,7 @@ class Options {
 	public function __construct() {
 
 		// Main plugin instance.
-		$instance     = certify();
+		$instance     = \CodeSoup\Certify\Init::get_instance();
 		$hooker       = $instance->get_hooker();
 		$this->assets = $instance->get_assets();
 	}

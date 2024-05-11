@@ -65,6 +65,10 @@
         width: 100%;
     }
 
+    .span-3 {
+        width: calc(25% - 12px);
+    }
+
     .span-6 {
         width: calc(50% - 8px);
     }

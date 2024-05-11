@@ -1,31 +1,20 @@
 <?php
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
-
-global $post;
-
-$wp_post = $post;
-$meta    = $args['args']['meta']; ?>
+defined( 'WPINC' ) || die; ?>
 
 <div class="certify metabox-code-soup">
 
 	<div class="row">
 		<div class="span-12">
-			<label class="sr-only" for="certify-changelog">
+			<label class="screen-reader-text" for="certify-changelog">
 				<?php _e( 'Changelog', 'certify' ); ?>
 			</label>
 
-			<?php wp_editor(
-				$wp_post->post_content,
-				'certify-changelog',
-				array(
-					'media_buttons'    => false,
-					'drag_drop_upload' => false,
-					'textarea_name'    => '_certify_changelog',
-					'teeny'            => false,
-				)
-			); ?>
+			<textarea
+				id="certify-changelog"
+				name="_certify_changelog"
+				rows="20"><?php echo $class->the_value('_certify_changelog', $data ); ?></textarea>
 		</div>
 	</div>
 </div>

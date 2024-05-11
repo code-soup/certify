@@ -1,12 +1,7 @@
 <?php
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
-
-global $post;
-
-$wp_post = $post;
-$meta    = $args['args']['meta']; ?>
+defined( 'WPINC' ) || die; ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">
@@ -18,7 +13,7 @@ $meta    = $args['args']['meta']; ?>
 				type="text"
 				id="certify-author-name"
 				name="_certify_author_name"
-				value="<?php echo $meta['_certify_author_name'][0]; ?>"
+				value="<?php echo $class->the_value('_certify_author_name', $data ); ?>"
 			>
 		</div>
 	
@@ -30,7 +25,7 @@ $meta    = $args['args']['meta']; ?>
 				type="url"
 				id="certify-author-profile-url"
 				name="_certify_author_profile_url"
-				value="<?php echo $meta['_certify_author_profile_url'][0]; ?>"
+				value="<?php echo $class->the_value('_certify_author_profile_url', $data ); ?>"
 			>
 		</div>
 	</div>
@@ -44,7 +39,7 @@ $meta    = $args['args']['meta']; ?>
 				type="text"
 				id="certify-plugin-version"
 				name="_certify_plugin_version"
-				value="<?php echo $meta['_certify_plugin_version'][0]; ?>"
+				value="<?php echo $class->the_value('_certify_plugin_version', $data ); ?>"
 			>
 		</div>
 
@@ -56,7 +51,7 @@ $meta    = $args['args']['meta']; ?>
 				type="text"
 				id="certify-php-required"
 				name="_certify_php_required"
-				value="<?php echo $meta['_certify_php_required'][0]; ?>"
+				value="<?php echo $class->the_value('_certify_php_required', $data ); ?>"
 			>
 		</div>
 
@@ -68,7 +63,7 @@ $meta    = $args['args']['meta']; ?>
 				type="text"
 				id="certify-wp-required"
 				name="_certify_wp_required"
-				value="<?php echo $meta['_certify_wp_required'][0]; ?>"
+				value="<?php echo $class->the_value('_certify_wp_required', $data ); ?>"
 			>
 		</div>
 	
@@ -80,7 +75,32 @@ $meta    = $args['args']['meta']; ?>
 				id="certify-wp-tested"
 				type="text"
 				name="_certify_wp_tested"
-				value="<?php echo $meta['_certify_wp_tested'][0]; ?>">
+				value="<?php echo $class->the_value('_certify_wp_tested', $data ); ?>">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span-6">
+			<label for="certify-plugin-download-url">
+				<?php _e( 'Plugin Download URL', 'certify' ); ?>
+			</label>
+			<input
+				type="url"
+				id="certify-plugin-download-url"
+				name="_certify_plugin_download_url"
+				value="<?php echo $class->the_value('_certify_plugin_download_url', $data ); ?>">
+		</div>
+
+		<div class="span-6">
+			<label for="certify-plugin-slug">
+				<?php _e( 'Plugin Slug', 'certify' ); ?>
+			</label>
+			<input
+				type="text"
+				id="certify-plugin-slug"
+				name="_certify_plugin_slug"
+				value="<?php echo $class->the_value('_certify_plugin_slug', $data ); ?>">
+				<small><?php _e('Plugin folder name', 'certify'); ?></small>
 		</div>
 	</div>
 
@@ -92,7 +112,7 @@ $meta    = $args['args']['meta']; ?>
 			<textarea
 				id="certify-description"
 				name="_certify_description"
-				rows="5"><?php echo $wp_post->post_excerpt; ?></textarea>
+				rows="7"><?php echo $class->the_value('_certify_description', $data ); ?></textarea>
 		</div>
 	</div>
 
@@ -104,20 +124,7 @@ $meta    = $args['args']['meta']; ?>
 			<textarea
 				id="certify-installation-instructions"
 				name="_certify_installation_instructions"
-				rows="3"><?php echo $meta['_certify_installation_instructions'][0]; ?></textarea>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="span-12">
-			<label for="certify-plugin-download-url">
-				<?php _e( 'Plugin Download URL', 'certify' ); ?>
-			</label>
-			<input
-				type="url"
-				id="certify-plugin-download-url"
-				name="_certify_plugin_download_url"
-				value="<?php echo $meta['_certify_plugin_download_url'][0]; ?>">
+				rows="10"><?php echo $class->the_value('_certify_installation_instructions', $data ); ?></textarea>
 		</div>
 	</div>
 </div>

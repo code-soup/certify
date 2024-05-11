@@ -1,12 +1,7 @@
 <?php
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
-
-global $post;
-
-$wp_post = $post;
-$meta    = $args['args']['meta']; ?>
+defined( 'WPINC' ) || die; ?>
 
 <div class="certify metabox-code-soup">
 
@@ -19,7 +14,7 @@ $meta    = $args['args']['meta']; ?>
 				type="url"
 				id="certify-banner-low"
 				name="_certify_banner_low"
-				value="<?php echo $meta['_certify_banner_low'][0]; ?>"
+				value="<?php echo $class->the_value('_certify_banner_low', $data ); ?>"
 			>
 			<small class="description description-block">
 				Image in jpeg or png format, 772x250px
@@ -36,7 +31,7 @@ $meta    = $args['args']['meta']; ?>
 				type="url"
 				id="certify-banner-high"
 				name="_certify_banner_high"
-				value="<?php echo $meta['_certify_banner_high'][0]; ?>"
+				value="<?php echo $class->the_value('_certify_banner_high', $data ); ?>"
 			>
 			<small class="description description-block">
 				Image in jpeg or png format, 1544x500px

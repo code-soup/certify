@@ -12,7 +12,7 @@ defined( 'WPINC' ) || die;
  * Defines the plugin name, version, and two examples hooks for how to
  * enqueue the admin-specific stylesheet and JavaScript.
  */
-class Post {
+class Main {
 
 	use \CodeSoup\Certify\Traits\HelpersTrait;
 
@@ -32,7 +32,7 @@ class Post {
 	public function __construct( $pos) {
 
 		// Main plugin instance.
-		$instance     = certify();
+		$instance     = \CodeSoup\Certify\Init::get_instance();
 		$hooker       = $instance->get_hooker();
 		$this->assets = $instance->get_assets();
 	}

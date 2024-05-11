@@ -49,7 +49,7 @@ return array(
 	'show_in_nav_menus'    => false,
 	'show_in_rest'         => false,
 	'show_ui'              => true,
-	'supports'             => array( 'title' ),
+	'supports'             => [''],
 	'register_meta_box_cb' => array( $this, 'register_meta_box' ),
 	'capabilities' => array(
         'edit_post'              => 'edit_certify',

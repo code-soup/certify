@@ -20,7 +20,7 @@ class I18n {
 	public function __construct() {
 		
 		// Main plugin instance
-		$instance = certify();
+		$instance = \CodeSoup\Certify\Init::get_instance();
 		$hooker   = $instance->get_hooker();
 
 		$hooker->add_action('init', $this, 'load_textdomain');

@@ -1,3 +1,7 @@
+<?php // Silence is golden
+
+defined( 'WPINC' ) || die; ?>
+
  <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">

@@ -1,16 +1,7 @@
 <?php
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
-
-global $post;
-
-$wp_post = $post;
-$params  = wp_parse_args( $args['args']['meta'], array(
-	'_certify_license_key' => ''
-	'_certify_expiry_date',
-	'_certify_activations'
-)); ?>
+defined( 'WPINC' ) || die; ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">
@@ -22,7 +13,7 @@ $params  = wp_parse_args( $args['args']['meta'], array(
 				type="text"
 				id="certify-license-key"
 				name="_certify_license_key"
-				value=""
+				value="<?php echo $post->post_name; ?>"
 				readonly
 			>
 		</div>
@@ -35,20 +26,20 @@ $params  = wp_parse_args( $args['args']['meta'], array(
 			</label>
 			<input
 				type="date"
-				id="certify-expiry-date"
-				name="_certify_expiry_date"
-				value=""
+				id="certify-next-bill-date"
+				name="_certify_next_bill_date"
+				value="<?php echo get_post_meta( $post->ID, '_certify_next_bill_date', true ); ?>"
 			>
 		</div>
 		<div class="span-6">
 			<label for="certify-activations">
-				<?php _e( 'Number of Activations', 'certify' ); ?>
+				<?php _e( 'Max Allowed Activations', 'certify' ); ?>
 			</label>
 			<input
 				type="number"
-				id="certify-activations"
-				name="_certify_activations"
-				value=""
+				id="certify-activations-limit"
+				name="_certify_activations_limit"
+				value="<?php echo max(1, intval( get_post_meta( $post->ID, '_certify_activations_limit', true ) )); ?>"
 				min="1"
 				step="1"
 			>

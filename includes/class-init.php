@@ -89,7 +89,6 @@ final class Init {
         }
 
         $instance = self::$instances[$cls];
-        // $instance->init();
 
         return $instance;
     }

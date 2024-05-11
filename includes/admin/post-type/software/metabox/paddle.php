@@ -1,36 +1,33 @@
 <?php
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
-
-global $post;
-
-$wp_post = $post;
-$meta    = $args['args']['meta']; ?>
+defined( 'WPINC' ) || die; ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">
 		<div class="span-6">
 			<label for="certify-paddle-product-id">
-				<?php _e( 'Product ID', 'certify' ); ?>
+				<?php _e( 'Product / Subscription Plan ID', 'certify' ); ?>
 			</label>
 			<input
-				id="certify-paddle-product-id"
+				id="certify-external-id"
 				type="number"
-				name="_certify_paddle_product_id"
-				value="<?php echo $meta['_certify_paddle_product_id'][0]; ?>"
+				name="_certify_external_id"
+				value="<?php echo $class->the_value('_certify_external_id', $data ); ?>"
 			>
 		</div>
-	
+
 		<div class="span-6">
-			<label for="certify-author-name">
-				<?php _e( 'Plan ID', 'certify' ); ?>
+			<label for="certify-activations">
+				<?php _e( 'Activations Limit', 'certify' ); ?>
 			</label>
 			<input
-				id="certify-paddle-plan-id"
 				type="number"
-				name="_certify_paddle_plan_id"
-				value="<?php echo $meta['_certify_paddle_plan_id'][0]; ?>"
+				id="certify-activations-limit"
+				name="_certify_activations_limit"
+				value="<?php echo $class->the_value('_certify_activations_limit', $data ); ?>"
+				min="1"
+				step="1"
 			>
 		</div>
 	</div>

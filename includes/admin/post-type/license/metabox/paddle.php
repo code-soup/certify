@@ -3,35 +3,38 @@
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
-global $post;
-
-$wp_post = $post;
-$meta    = $args['args']['meta']; ?>
+$software = new \WP_Query(['post_type' => 'software', 'posts_per_page' => 99 ] ); ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">
 		<div class="span-6">
-			<label for="certify-paddle-product-id">
-				<?php _e( 'Product ID', 'certify' ); ?>
+			<label for="certify-external-id">
+				<?php _e( 'Product / Subscription Plan ID', 'certify' ); ?>
 			</label>
 			<input
-				id="certify-paddle-product-id"
+				id="certify-external-id"
 				type="number"
-				name="_certify_paddle_product_id"
-				value="<?php echo $meta['_certify_paddle_product_id'][0]; ?>"
+				name="_certify_external_id"
+				value="<?php echo get_post_meta( $post->ID, '_certify_external_id', true ); ?>"
 			>
 		</div>
 	
 		<div class="span-6">
-			<label for="certify-author-name">
-				<?php _e( 'Plan ID', 'certify' ); ?>
+			<label for="certify-software">
+				<?php _e( 'Software', 'certify' ); ?>
 			</label>
-			<input
-				id="certify-paddle-plan-id"
-				type="number"
-				name="_certify_paddle_plan_id"
-				value="<?php echo $meta['_certify_paddle_plan_id'][0]; ?>"
-			>
+			<select name="_certify_software">
+				<option> - Not Selected - </option>
+				<?php foreach ( $software->posts as $p )
+				{
+					printf(
+						'<option value="%d"%s>%s</option>',
+						$p->ID,
+						selected( $p->ID, $post->post_parent, false ),
+						$p->post_title
+					);
+				} ?>
+			</select>
 		</div>
 	</div>
 </div>

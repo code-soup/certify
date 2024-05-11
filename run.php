@@ -6,18 +6,6 @@ defined('WPINC') || die;
 // Autoload all classes via composer.
 require "vendor/autoload.php";
 
-/**
- * Make main plugin class available via global function call.
- *
- * @since    1.0.0
- */
-function certify() {
-
-    return CodeSoup\Certify\Init::get_instance();
-}
-
 // Init plugin and make instance globally available
-$plugin = certify();
+$plugin = \CodeSoup\Certify\Init::get_instance();
 $plugin->init();
-
-$GLOBALS['certify'] = $plugin;

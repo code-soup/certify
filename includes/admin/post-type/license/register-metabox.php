@@ -36,15 +36,15 @@ return function ( $post, $meta, $parent ) {
 	);
 
 	add_meta_box(
-		$post->post_type . '-settings',
-		esc_html__( 'Other Settings', 'certify' ),
+		$post->post_type . '-activations',
+		esc_html__( 'Activation Log', 'certify' ),
 		array( $parent, 'render_meta_box'),
 		'license',
 		'normal',
 		'high',
 		array(
 			'post'  => $post,
-			'group' => 'settings',
+			'group' => 'activations',
 			'meta'  => $meta,
 		),
 	);

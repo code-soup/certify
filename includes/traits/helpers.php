@@ -10,8 +10,6 @@ defined( 'WPINC' ) || die;
  */
 trait HelpersTrait {
 
-
-
     /**
      * Return absolute path to plugin dir
      * Always returns path without trailing slash
@@ -140,5 +138,21 @@ trait HelpersTrait {
     private function log( $variable ) {
 
         error_log( print_r( $variable, true ) );
+    }
+
+
+
+    /**
+     * Echo debgu info to screen
+     * Useful for debugging your code, this method will print_r any variable onto screen.
+     *
+     * @param mixed $message
+     */
+    private function print( $variable ) {
+
+        printf(
+            '<pre>%s</pre>',
+            print_r( $variable, true )
+        );
     }
 }

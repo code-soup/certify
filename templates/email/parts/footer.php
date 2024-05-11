@@ -1,3 +1,7 @@
+<?php // Silence is golden
+
+defined( 'WPINC' ) || die; ?>
+
 <table cellpadding="0" cellspacing="0" class="es-footer" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:100%;table-layout:fixed !important;background-color:transparent;background-repeat:repeat;background-position:center top">
    <tr>
        <td align="center" style="padding:0;Margin:0">
@@ -34,6 +38,7 @@
                                                <p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;letter-spacing:0;color:#333333;font-size:12px">4562 Hazy Panda Limits, Chair Crossing, Kentucky, US, 607898</p>
                                            </td>
                                        </tr>
+                                       <?php /*
                                        <tr>
                                            <td style="padding:0;Margin:0">
                                                <table cellpadding="0" cellspacing="0" width="100%" class="es-menu" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
@@ -50,7 +55,8 @@
                                                    </tr>
                                                </table>
                                            </td>
-                                       </tr>
+                                        </tr>
+                                        */ ?>
                                    </table>
                                </td>
                            </tr>

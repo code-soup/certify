@@ -1,3 +1,7 @@
+<?php // Silence is golden
+
+defined( 'WPINC' ) || die; ?>
+
 <table cellpadding="0" cellspacing="0" class="es-content" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:100%;table-layout:fixed !important">
     <tr>
         <td class="es-info-area" align="center" style="padding:0;Margin:0">

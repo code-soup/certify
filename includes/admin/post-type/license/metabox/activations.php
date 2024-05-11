@@ -4,12 +4,13 @@
 defined( 'WPINC' ) || die;
 
 global $post;
-
-$wp_post = $post;
-$meta    = $args['args']['meta']; ?>
+$meta = json_decode( $post->post_excerpt, true ); ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">
+		<?php if ( empty($meta['activations']) ) {
+			_e( 'No domain activations made so far', 'certify' );
+		} ?>
 	</div>
 </div>
 

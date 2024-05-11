@@ -15,7 +15,7 @@ class Init {
      */
     public function __construct() {
 
-        $instance = certify();
+        $instance = \CodeSoup\Certify\Init::get_instance();
         $hooker   = $instance->get_hooker();
 
         // Register all Routes

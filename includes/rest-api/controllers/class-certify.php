@@ -50,7 +50,7 @@ class Certify {
                 array(
                     'methods'             => \WP_REST_Server::CREATABLE,
                     'callback'            => array($this, 'create_license'),
-                    'permission_callback' => array($this, 'create_license_permissions_check'),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );
@@ -60,9 +60,45 @@ class Certify {
             '/validate',
             array(
                 array(
-                    'methods'             => \WP_REST_Server::CREATABLE,
+                    'methods'             => \WP_REST_Server::READABLE,
                     'callback'            => array($this, 'validate_license'),
-                    'permission_callback' => array($this, 'validate_license_permissions_check'),
+                    'permission_callback' => '__return_true',
+                ),
+            )
+        );
+
+        register_rest_route(
+            'certify/v1',
+            '/activate-license',
+            array(
+                array(
+                    'methods'             => \WP_REST_Server::EDITABLE,
+                    'callback'            => array($this, 'activate_license'),
+                    'permission_callback' => '__return_true',
+                ),
+            )
+        );
+
+        register_rest_route(
+            'certify/v1',
+            '/deactivate-license',
+            array(
+                array(
+                    'methods'             => \WP_REST_Server::EDITABLE,
+                    'callback'            => array($this, 'deactivate_license'),
+                    'permission_callback' => '__return_true',
+                ),
+            )
+        );
+
+        register_rest_route(
+            'certify/v1',
+            '/plugin-update',
+            array(
+                array(
+                    'methods'             => \WP_REST_Server::READABLE,
+                    'callback'            => array($this, 'handle_plugin_update'),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );
@@ -70,13 +106,67 @@ class Certify {
 
 
 
-
+    /**
+     * Generate new License key and email it to user
+     * 
+     * @param  \WP_REST_Request $request [description]
+     * @return [type]                    [description]
+     */
     public function create_license( \WP_REST_Request $request ) {
 
         $licence = new License;
-        $data = $licence->create( (array) $request->get_params() );
+        $data    = $licence->create( $request->get_params() );
 
         return rest_ensure_response( $data );
+    }
+
+
+    /**
+     * Validate License Key
+     * 
+     * @param  \WP_REST_Request $request [description]
+     * @return bool                    
+     */
+    public function validate_license( \WP_REST_Request $request )
+    {
+        $license  = new License( $request->get_param('license_key') );
+        $is_valid = $license->validate();
+        
+        return rest_ensure_response( $is_valid );
+    }
+
+    /**
+     * Activate license for a domain
+     * 
+     * @param  \WP_REST_Request $request [description]
+     * @return [type]                    [description]
+     */
+    public function activate_license( \WP_REST_Request $request )
+    {
+        $license_key = $request->get_param('license_key');
+        $license     = new License($license_key);
+        $response    = $license->activate([
+            'host' => $request->get_header('host')
+        ]);
+
+        return rest_ensure_response( $response );
+    }
+
+    /**
+     * Deactivate license for a domain
+     * 
+     * @param  \WP_REST_Request $request [description]
+     * @return [type]                    [description]
+     */
+    public function deactivate_license( \WP_REST_Request $request )
+    {
+        $license_key = $request->get_param('license_key');
+        $license     = new License($license_key);
+        $response    = $license->deactivate([
+            'host' => $request->get_header('host')
+        ]);
+
+        return rest_ensure_response( $response );
     }
 
 
@@ -85,27 +175,12 @@ class Certify {
      * @param  \WP_REST_Request $request [description]
      * @return [type]                    [description]
      */
-    public function validate_license( \WP_REST_Request $request ) {
+    public function handle_plugin_update( \WP_REST_Request $request ) {
 
-        return rest_ensure_response($request);
-    }
-
-
-    /**
-     * Validate user permissions when trying to deploy from docker
-     */
-    public function create_license_permissions_check( \WP_REST_Request $request ) {
-
-        return true;
-    }
-
-
-    /**
-     * Validate user permissions when trying to deploy from docker
-     */
-    public function validate_license_permissions_check( \WP_REST_Request $request ) {
-
-        return true;
+        $license = new License( $request->get_param('license_key') );
+        $data    = $license->handle_update_response();
+        
+        return rest_ensure_response( $data );
     }
 
 
