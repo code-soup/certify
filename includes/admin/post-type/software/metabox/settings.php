@@ -28,6 +28,18 @@ defined( 'WPINC' ) || die; ?>
 				value="<?php echo $class->the_value('_certify_author_profile_url', $data ); ?>"
 			>
 		</div>
+
+		<div class="span-6">
+			<label for="certify-author-name">
+				<?php _e( 'Plugin homepage URL', 'certify' ); ?>
+			</label>
+			<input
+				type="url"
+				id="certify-homepage-url"
+				name="_certify_homepage_url"
+				value="<?php echo $class->the_value('_certify_plugin_homepage', $data ); ?>"
+			>
+		</div>
 	</div>
 
 	<div class="row">
@@ -93,14 +105,16 @@ defined( 'WPINC' ) || die; ?>
 
 		<div class="span-6">
 			<label for="certify-plugin-slug">
-				<?php _e( 'Plugin Slug', 'certify' ); ?>
+				<?php _e( 'Plugin Path', 'certify' ); ?>
 			</label>
 			<input
 				type="text"
 				id="certify-plugin-slug"
 				name="_certify_plugin_slug"
-				value="<?php echo $class->the_value('_certify_plugin_slug', $data ); ?>">
-				<small><?php _e('Plugin folder name', 'certify'); ?></small>
+				value="<?php echo $class->the_value('_certify_plugin_slug', $data ); ?>"
+				placeholde="my-plugin-folder/index.php"
+				>
+				<small><?php _e('Important for enabling updates, index.php is where you plugin header data is entered', 'certify'); ?></small>
 		</div>
 	</div>
 

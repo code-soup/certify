@@ -12,22 +12,23 @@ class Settings_Page {
     // Main plugin instance.
     protected static $instance = null;
 
-    // Assets loader class.
-    protected $assets;
-
     private $tabs;
+
+    private $options;
 
     public function __construct() {
 
         // Main plugin instance.
         $instance     = \CodeSoup\Certify\Init::get_instance();
         $hooker       = $instance->get_hooker();
-        $this->assets = $instance->get_assets();
 
         $hooker->add_action( 'admin_menu', $this );
         $hooker->add_action( 'admin_init', $this );
     }
 
+    /**
+     * Register new page
+     */
     public function admin_menu()
     {
         add_submenu_page(
@@ -36,32 +37,37 @@ class Settings_Page {
             'Settings',
             'manage_certify',
             'certify-settings',
-            array( &$this, 'render_settings_page'),
+            array( $this, 'render_settings_page'),
         );
     }
 
+
+    /**
+     * Register settings sections and fields
+     */
     public function admin_init()
     {
-        $option_group = 'certify_settigns_page';
-        $option_name  = 'certify_settings';
-        
-        register_setting( $option_group, $option_name );
+        $option_page = 'certify_settigns_page';
+        $option_name = 'certify_settings';
+        $options     = get_option( 'certify_settings' );
+
+        register_setting( $option_page, $option_name );
 
         /**
          * Tabs
          */
         $this->tabs = array(
             array(
-                'tab_id'       => 'general',
-                'tab_title'    => 'General',
-                'option_group' => $option_group,
-                'option_name'  => $option_name,
+                'tab_id'      => 'general',
+                'tab_title'   => 'General',
+                'option_page' => $option_page,
+                'option_name' => $option_name,
             ),
             array(
-                'tab_id'       => 'email',
-                'tab_title'    => 'Email',
-                'option_group' => $option_group,
-                'option_name'  => $option_name,
+                'tab_id'      => 'email',
+                'tab_title'   => 'Email',
+                'option_page' => $option_page,
+                'option_name' => $option_name,
             ),
         );
 
@@ -78,8 +84,8 @@ class Settings_Page {
             add_settings_section(
                 $tab['tab_id'],
                 $tab['tab_title'],
-                null,
-                $tab['option_group'],
+                NULL,
+                $tab['option_page'],
             );
 
             /**
@@ -87,12 +93,22 @@ class Settings_Page {
              */
             foreach ( $fields as $field )
             {
+                $name           = str_replace( '-', '_', sanitize_title( $field['id'] ) );
+                $field['name']  = $name;
+                $field['value'] = isset( $options[ $tab['tab_id'] ][$name] )
+                    ? $options[ $tab['tab_id'] ][$name]
+                    : '';
+
                 add_settings_field(
                     $field['id'],
                     $field['label'],
-                    [&$this, 'render_field'],
-                    $tab['option_group'],
+                    [$this, 'render_field'],
+                    $tab['option_page'],
                     $tab['tab_id'],
+                    array(
+                        'field'   => $field,
+                        'section' => $tab['tab_id'],
+                    ),
                 );
             }
         }
@@ -100,11 +116,11 @@ class Settings_Page {
 
     public function render_settings_page()
     {
-        include 'settings/index.php';
+        require 'settings/index.php';
     }
 
-    public function render_field()
+    public function render_field( $args )
     {
-        
+        require 'settings/form/index.php';
     }
 }

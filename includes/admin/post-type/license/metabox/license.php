@@ -14,6 +14,7 @@ defined( 'WPINC' ) || die; ?>
 				id="certify-license-key"
 				name="_certify_license_key"
 				value="<?php echo $post->post_name; ?>"
+				placeholder="<?php _e('License key will be generated on save', 'certify'); ?>"
 				readonly
 			>
 		</div>

@@ -114,10 +114,10 @@ class Certify {
      */
     public function create_license( \WP_REST_Request $request ) {
 
-        $licence = new License;
-        $data    = $licence->create( $request->get_params() );
+        $license  = new License;
+        $response = $license->create( $request->get_params() );
 
-        return rest_ensure_response( $data );
+        return rest_ensure_response( $response );
     }
 
 
@@ -129,10 +129,15 @@ class Certify {
      */
     public function validate_license( \WP_REST_Request $request )
     {
-        $license  = new License( $request->get_param('license_key') );
-        $is_valid = $license->validate();
-        
-        return rest_ensure_response( $is_valid );
+        if ( ! empty($request->get_param('license_key')) )
+        {
+            $license  = new License( $request->get_param('license_key') );
+            $response = $license->validate();
+
+            return rest_ensure_response( $response );
+        }
+
+        return rest_ensure_response( false );
     }
 
     /**
@@ -142,14 +147,18 @@ class Certify {
      * @return [type]                    [description]
      */
     public function activate_license( \WP_REST_Request $request )
-    {
-        $license_key = $request->get_param('license_key');
-        $license     = new License($license_key);
-        $response    = $license->activate([
-            'host' => $request->get_header('host')
-        ]);
+    {   
+        if ( ! empty($request->get_param('license_key')) )
+        {
+            $license  = new License($request->get_param('license_key') );
+            $response = $license->activate([
+                'host' => $request->get_header('host')
+            ]);
 
-        return rest_ensure_response( $response );
+            return rest_ensure_response( $response );
+        }
+
+        return rest_ensure_response( false );
     }
 
     /**
@@ -160,13 +169,17 @@ class Certify {
      */
     public function deactivate_license( \WP_REST_Request $request )
     {
-        $license_key = $request->get_param('license_key');
-        $license     = new License($license_key);
-        $response    = $license->deactivate([
-            'host' => $request->get_header('host')
-        ]);
+        if ( ! empty($request->get_param('license_key')) )
+        {
+            $license  = new License( $request->get_param('license_key') );
+            $response = $license->deactivate([
+                'host' => $request->get_header('host')
+            ]);
 
-        return rest_ensure_response( $response );
+            return rest_ensure_response( $response );
+        }
+
+        return rest_ensure_response( false );
     }
 
 
@@ -177,10 +190,15 @@ class Certify {
      */
     public function handle_plugin_update( \WP_REST_Request $request ) {
 
-        $license = new License( $request->get_param('license_key') );
-        $data    = $license->handle_update_response();
-        
-        return rest_ensure_response( $data );
+        if ( ! empty($request->get_param('license_key')) )
+        {
+            $license  = new License( $request->get_param('license_key') );
+            $response = $license->handle_update_response();
+            
+            return rest_ensure_response( $response );
+        }
+
+        return rest_ensure_response( false );
     }
 
 
@@ -191,22 +209,12 @@ class Certify {
 
         $params = array();
 
-        $params['id'] = array(
-            'default'           => 0,
-            'description'       => _x( 'Software ID', 'WP_Post object ID', 'certify' ),
-            'type'              => 'integer',
-            'sanitize_callback' => 'intval',
-            'validate_callback' => 'rest_validate_request_arg',
-            'field'             => 'ID',
-        );
-
-        $params['secret'] = array(
+        $params['license_key'] = array(
             'default'           => '',
-            'description'       => _x( 'Secret Key', 'Paddle API key', 'certify' ),
+            'description'       => __( 'License Key', 'certify' ),
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'validate_callback' => 'rest_validate_request_arg',
-            'field'             => 'post_password',
         );
 
         return $params;

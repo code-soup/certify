@@ -4,13 +4,27 @@
 defined( 'WPINC' ) || die;
 
 global $post;
-$meta = json_decode( $post->post_excerpt, true ); ?>
+
+$activations = json_decode( html_entity_decode($post->post_excerpt), true ); ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">
-		<?php if ( empty($meta['activations']) ) {
-			_e( 'No domain activations made so far', 'certify' );
-		} ?>
+		<div class="span-12">
+			<?php if ( empty($activations) ) {
+				_e( 'No domain activations made so far', 'certify' );
+			} 
+
+			foreach ( $activations as $active ) {
+
+				$date = \DateTime::createFromFormat('U', $active['time'] );
+
+				printf(
+					'<p><b>%s</b> <time>%s</time></p><hr>',
+					$active['host'],
+					$date->format('d. M Y. H:i')
+				);
+			} ?>
+		</div>
 	</div>
 </div>
 

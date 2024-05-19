@@ -8,6 +8,6 @@ return array(
 		'id'          => 'email-logo',
 		'label'       => 'Email Logo',
 		'description' => '',
-		'type'        => 'file',
+		'type'        => 'media',
 	),
 );

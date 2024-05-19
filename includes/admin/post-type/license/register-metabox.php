@@ -48,4 +48,7 @@ return function ( $post, $meta, $parent ) {
 			'meta'  => $meta,
 		),
 	);
+
+	remove_meta_box( 'slugdiv', 'license', 'normal' );
+	remove_meta_box( 'commentsdiv', 'license', 'normal' );
 };

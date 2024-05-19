@@ -57,8 +57,21 @@ return function( $post_id, $parent ) {
 	{
 		$_savedata = array(
 			'post_parent'  => $_postdata['_certify_software'],
-			'post_excerpt' => $_postdata,
+			'post_excerpt' => wp_json_encode( $_postdata ),
 		);
+
+
+		/**
+		 * Manually adding license trough WP Admin
+		 */
+		if ( empty($_POST['_certify_license_key']) )
+		{
+			$license     = new \CodeSoup\Certify\Admin\License();
+			$license_key = $license->generateLicenseKey();
+
+			$_savedata['post_name']            = $license_key;
+			$_postdata['_certify_license_key'] = $license_key;
+		}
 
 		update_post_meta( $post_id, '_certify_next_bill_date', $_postdata['_certify_next_bill_date'] );
 	}

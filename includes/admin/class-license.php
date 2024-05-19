@@ -117,18 +117,30 @@ class License {
 			return $response;
 		}
 
+		$args['host'] = 'me.zz';
+
+		error_log( print_r($obj, true) );
+
 		// Add to list
-		$updated   = $this->remove_activation( $args['host'], $obj['activations'] );
+		$updated   = []; $this->remove_activation( $args['host'], $obj['activations'] );
+		$updated[] = array(
+			'host' => $args['host'],
+			'time' => time()
+		);
 		$updated[] = array(
 			'host' => $args['host'],
 			'time' => time()
 		);
 
+		// $this->log( $updated );
+
 		// Save to DB
 		wp_update_post([
 			'ID'           => $obj['id'],
-			'post_excerpt' => wp_json_encode( $updated ),
+			'post_excerpt' => wp_json_encode($updated),
 		]);
+
+		// $this->log( wp_json_encode( $updated, JSON_FORCE_OBJECT ) );
 
 		// Log
 		$this->add_log_entry([
@@ -161,7 +173,7 @@ class License {
 		// Save to DB
 		wp_update_post([
 			'ID'           => $obj['id'],
-			'post_excerpt' => wp_json_encode( $updated ),
+			'post_excerpt' => wp_json_encode( $updated, JSON_PRETTY_PRINT ),
 		]);
 
 		// Log
@@ -375,7 +387,7 @@ class License {
 	 * Generate a License Key.
 	 * @return  string
 	 */
-	function generateLicenseKey()
+	public function generateLicenseKey()
 	{
 		$hash = sha1( uniqid(rand(), true) );
 
