@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB;
+namespace CodeSoup\Certify;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -18,9 +18,12 @@ defined( 'WPINC' ) || die;
 final class Init {
 
 	/**
-	 * Main plugin instance
-	 */
-	private static $instance;
+     * The Singleton's instance is stored in a static field. This field is an
+     * array, because we'll allow our Singleton to have subclasses. Each item in
+     * this array will be an instance of a specific Singleton's subclass. You'll
+     * see how this works in a moment.
+     */
+    private static $instances = [];
 
 
 	/**
@@ -29,13 +32,13 @@ final class Init {
 	 * @var array
 	 */
 	private $constants = array(
-		'MIN_WP_VERSION_SUPPORT_TERMS' => '5.0',
-		'MIN_WP_VERSION'               => '5.0',
-		'MIN_PHP_VERSION'              => '7.1',
-		'MIN_MYSQL_VERSION'            => '5.0.0',
-		'PLUGIN_PREFIX'                => 'WPPB',
-		'PLUGIN_NAME'                  => 'WordPress Plugin Boilerplate',
-		'PLUGIN_VERSION'               => '1.0.0',
+		'CS_MIN_WP_VERSION_SUPPORT_TERMS' => '6.0',
+		'CS_MIN_WP_VERSION'               => '6.0',
+		'CS_MIN_PHP_VERSION'              => '8.1',
+		'CS_MIN_MYSQL_VERSION'            => '5.0.0',
+		'CS_PLUGIN_PREFIX'                => 'CERTIFY',
+		'CS_PLUGIN_NAME'                  => 'Certify',
+		'CS_PLUGIN_VERSION'               => '1.0.0',
 	);
 
 
@@ -80,11 +83,14 @@ final class Init {
 	 */
 	public static function get_instance()
     {
-        if (null === self::$instance) {
-            self::$instance = new self();
+        $cls = static::class;
+        if (!isset(self::$instances[$cls])) {
+            self::$instances[$cls] = new static();
         }
 
-        return self::$instance;
+        $instance = self::$instances[$cls];
+
+        return $instance;
     }
 
 	
@@ -100,7 +106,7 @@ final class Init {
     /**
      * Singletons should not be restorable from strings.
      */
-    private function __wakeup()
+    public function __wakeup()
     {
         throw new \Exception('Cannot unserialize ' . __CLASS__);
     }
@@ -129,7 +135,10 @@ final class Init {
 		new Admin\Init();
 
 		// Public related stuff.
-		new Frontend\Init();
+		// new Frontend\Init();
+
+		// REST API handler
+		new RestApi\Init();
 
 		// Run all hooks
 		$this->run();

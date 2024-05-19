@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB\Traits;
+namespace CodeSoup\Certify\Traits;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -9,8 +9,6 @@ defined( 'WPINC' ) || die;
  * Helper methods
  */
 trait HelpersTrait {
-
-
 
     /**
      * Return absolute path to plugin dir
@@ -49,7 +47,7 @@ trait HelpersTrait {
      */
     private function get_plugin_name(): string {
 
-        return $this->get_constant( 'PLUGIN_NAME' );
+        return $this->get_constant( 'CS_PLUGIN_NAME' );
     }
 
 
@@ -60,7 +58,7 @@ trait HelpersTrait {
      */
     private function get_plugin_version(): string {
 
-        return $this->get_constant( 'PLUGIN_VERSION' );
+        return $this->get_constant( 'CS_PLUGIN_VERSION' );
     }
 
 
@@ -73,7 +71,7 @@ trait HelpersTrait {
      */
     private function get_plugin_id( string $append = '' ): string {
 
-        $dashed = str_replace( '_', '-', $this->get_constant( 'PLUGIN_NAME' ) );
+        $dashed = str_replace( '_', '-', $this->get_constant( 'CS_PLUGIN_NAME' ) );
 
         return sanitize_title( $dashed ) . $append;
     }
@@ -140,5 +138,21 @@ trait HelpersTrait {
     private function log( $variable ) {
 
         error_log( print_r( $variable, true ) );
+    }
+
+
+
+    /**
+     * Echo debgu info to screen
+     * Useful for debugging your code, this method will print_r any variable onto screen.
+     *
+     * @param mixed $message
+     */
+    private function print( $variable ) {
+
+        printf(
+            '<pre>%s</pre>',
+            print_r( $variable, true )
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace WPPB;
+namespace CodeSoup\Certify;
 
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
@@ -20,7 +20,7 @@ class I18n {
 	public function __construct() {
 		
 		// Main plugin instance
-		$instance = wppb();
+		$instance = \CodeSoup\Certify\Init::get_instance();
 		$hooker   = $instance->get_hooker();
 
 		$hooker->add_action('init', $this, 'load_textdomain');
@@ -39,7 +39,7 @@ class I18n {
 	public function load_textdomain() {
 
 		load_plugin_textdomain(
-			'wppb',
+			'certify',
 			false,
 			'/languages'
 		);

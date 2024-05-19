@@ -48,6 +48,8 @@ bower_components
 node_modules
 _test-src
 dist
+_zip
+_svn
 
 # Logs
 logs

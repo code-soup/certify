@@ -17,12 +17,13 @@
  * Contributors:      bobz
  * License:           GPL-3.0+
  * License URI:       http://www.gnu.org/licenses/gpl-3.0.txt
- * Text Domain:       wppb
+ * Text Domain:       certify
  * Domain Path:       /languages
  */
 
 // If this file is called directly, abort.
 defined( 'WPINC' ) || die;
+
 
 /**
  * NOTE: Activation hooks need to be inside index.php file or it might not work properly
@@ -35,7 +36,7 @@ defined( 'WPINC' ) || die;
 register_activation_hook( __FILE__, function() {
 
     // On activate do this
-    CS\Certify\Activator::activate();
+    CodeSoup\Certify\Activator::activate();
 });
 
 
@@ -47,7 +48,7 @@ register_activation_hook( __FILE__, function() {
 register_deactivation_hook( __FILE__, function () {
     
     // On deactivate do that
-    CS\Certify\Deactivator::deactivate();
+    CodeSoup\Certify\Deactivator::deactivate();
 });
 
 
