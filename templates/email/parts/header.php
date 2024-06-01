@@ -37,7 +37,7 @@ defined( 'WPINC' ) || die; ?>
                                     <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                         <tr>
                                             <td align="center" style="padding:0;Margin:0;padding-bottom:20px;font-size:0px">
-                                                <img src="https://ehfepko.stripocdn.email/content/guids/CABINET_887f48b6a2f22ad4fb67bc2a58c0956b/images/93351617889024778.png" alt="Logo" style="display:block;font-size:12px;border:0;outline:none;text-decoration:none" width="200" title="Logo">
+                                                <?php echo $instance->getOption('logo'); ?>
                                             </td>
                                         </tr>
                                     </table>

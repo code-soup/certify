@@ -34,8 +34,15 @@ defined( 'WPINC' ) || die; ?>
                                        </tr>
                                        <tr>
                                            <td align="center" style="padding:0;Margin:0;padding-bottom:35px">
-                                               <p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;letter-spacing:0;color:#333333;font-size:12px">Style Casual&nbsp;© 2021 Style Casual, Inc. All Rights Reserved.</p>
-                                               <p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;letter-spacing:0;color:#333333;font-size:12px">4562 Hazy Panda Limits, Chair Crossing, Kentucky, US, 607898</p>
+                                               <p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;letter-spacing:0;color:#333333;font-size:12px">
+                                                   <?php printf(
+                                                        '%s&nbsp;&copy; %s %s All Rights Reserved.',
+                                                        $instance->getOption('company_name'),
+                                                        date('Y'),
+                                                        $instance->getOption('company_name')
+                                                    ); ?>
+                                               </p>
+                                               <p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;letter-spacing:0;color:#333333;font-size:12px"><?php echo $instance->getOption(); ?></p>
                                            </td>
                                        </tr>
                                        <?php /*

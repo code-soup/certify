@@ -23,8 +23,14 @@ return array(
 		'type'        => 'text',
 	),
 	array(
-		'id'          => 'country',
-		'label'       => 'Country',
+		'id'          => 'city',
+		'label'       => 'City',
+		'description' => '',
+		'type'        => 'text',
+	),
+	array(
+		'id'          => 'postcode',
+		'label'       => 'Postcode',
 		'description' => '',
 		'type'        => 'text',
 	),
@@ -35,8 +41,8 @@ return array(
 		'type'        => 'text',
 	),
 	array(
-		'id'          => 'postcode',
-		'label'       => 'Postcode',
+		'id'          => 'country',
+		'label'       => 'Country',
 		'description' => '',
 		'type'        => 'text',
 	),
