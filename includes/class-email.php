@@ -21,6 +21,7 @@ class EmailCustomer {
 			'subject'   => 'Email Subject',
 			'headers'   => [],
 			'mailer'    => $this,
+			'options'   => get_option('certify_settings'),
     	]);
 		
 		$this->to      = $params['recepient'];
@@ -37,6 +38,7 @@ class EmailCustomer {
 	        return false;
 	    }
 
+	    $instance = $this;
 
 	    // Extract variables to be available in the template scope.
 	    extract($variables);
@@ -60,4 +62,31 @@ class EmailCustomer {
 
         return wp_mail($this->to, $this->subject, $this->body, $this->headers);
     }
+
+    public function getOption( $key = '' )
+    {
+		$settings = unserialize($this->options);
+		$email    = $settings['email'];
+		$general  = $settings['general'];
+	  	$address = array(
+			'company_name'   => $email['company_name'],
+			'address_line_1' => $email['address_line_1'],
+			'address_line_2' => $email['address_line_2'],
+			'country'        => $email['country'],
+			'state'          => $email['state'],
+			'postcode'       => $email['postcode'],
+		);
+
+	  	if ( ! empty($key) )
+	  	{
+	  		return $address[ $key ];
+	  	}
+
+	  	if ( 'logo' === $key )
+	  	{
+	  		return wp_get_attchment_image( $general['email_logo'], 'medium' );
+	  	}
+
+	  	return implode(', ', array_filter($address));
+	}
 }

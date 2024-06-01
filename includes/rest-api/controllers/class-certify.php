@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 namespace CodeSoup\Certify\RestApi\Controllers;
 
