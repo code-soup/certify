@@ -57,7 +57,6 @@ return function( $post_id, $parent ) {
 	{
 		$_savedata = array(
 			'post_parent'  => $_postdata['_certify_software'],
-			'post_excerpt' => wp_json_encode( $_postdata ),
 		);
 
 

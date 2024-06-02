@@ -49,6 +49,20 @@ return function ( $post, $meta, $parent ) {
 		),
 	);
 
+	add_meta_box(
+		$post->post_type . '-email',
+		esc_html__( 'Email Resend', 'certify' ),
+		array( $parent, 'render_meta_box'),
+		'license',
+		'side',
+		'',
+		array(
+			'post'  => $post,
+			'group' => 'email',
+			'meta'  => $meta,
+		),
+	);
+
 	remove_meta_box( 'slugdiv', 'license', 'normal' );
 	remove_meta_box( 'commentsdiv', 'license', 'normal' );
 };

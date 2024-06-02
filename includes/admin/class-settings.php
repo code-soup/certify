@@ -69,6 +69,12 @@ class Settings_Page {
                 'option_page' => $option_page,
                 'option_name' => $option_name,
             ),
+            array(
+                'tab_id'      => 'paddle',
+                'tab_title'   => 'Paddle',
+                'option_page' => $option_page,
+                'option_name' => $option_name,
+            ),
         );
 
         
@@ -77,7 +83,7 @@ class Settings_Page {
          */
         foreach ( $this->tabs as $tab )
         {
-            $fields = require_once "settings/tab-{$tab['tab_id']}.php";
+            $fields = require_once "settings/fields/{$tab['tab_id']}.php";
             /**
              * Register section
              */
@@ -122,5 +128,30 @@ class Settings_Page {
     public function render_field( $args )
     {
         require 'settings/form/index.php';
+    }
+
+    /**
+     * Get single option value
+     * @param  string $name    [description]
+     * @param  string $section [description]
+     * @return [type]          [description]
+     */
+    public static function get_option( $name = '', $section = 'general' )
+    {
+        // Empty
+        $key     = str_replace('-', '_', $name);
+        $options = empty(self::$options)
+            ? get_option( 'certify_settings' )
+            : self::$options;
+
+
+        if ( ! empty($section) && ! empty($key) )
+        {
+            return isset( $options[ $section ][ $key ] )
+                ? $options[ $section ][ $name ]
+                : NULL;
+        }
+
+        return $options;
     }
 }

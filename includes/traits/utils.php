@@ -26,4 +26,8 @@ trait UtilsTrait {
 
         printf( $this->get_value( $key, $array, $default ) );
     }
+
+    private function get_option( $name = '', $section = '' ) {
+        return \CodeSoup\Certify\Admin\Settings_Page::get_option( $name, $section );
+    }
 }
