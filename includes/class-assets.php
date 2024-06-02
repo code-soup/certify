@@ -94,6 +94,17 @@ class Assets {
             return sprintf( '%s/%s', $this->dist_uri, $this->manifest[ $filename ] );
         }
 
+        switch( pathinfo($filename, PATHINFO_EXTENSION) )
+        {
+            case 'js':
+                $filename = sprintf('scripts/%s', $filename);
+            break;
+
+            case 'css':
+                $filename = sprintf('styles/%s', $filename);
+            break;
+        }
+
         // Return default file location.
         return sprintf( '%s/%s', $this->dist_uri, $filename );
     }
