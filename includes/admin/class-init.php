@@ -72,19 +72,31 @@ class Init {
 
 		wp_enqueue_style(
 			$this->get_plugin_id('/wp/css'),
-			$this->assets->get('styles/admin.css'),
+			$this->assets->get('admin.css'),
 			array(),
 			$this->get_plugin_version(),
 			'all'
 		);
 
+		$script_id = $this->get_plugin_id('/wp/js');
+
 		wp_enqueue_script(
-			$this->get_plugin_id('/wp/js'),
-			$this->assets->get('scripts/admin.js'),
+			$script_id,
+			$this->assets->get('admin.js'),
 			array(),
 			$this->get_plugin_version(),
 			false
 		);
+
+		wp_localize_script(
+            $script_id,
+            $this->get_plugin_id(),
+            array(
+                'nonce'    => wp_create_nonce( 'certify_wp_xhr_nonce' ),
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'post_id'  => get_the_ID(),
+            )
+        );
 	}
 
 

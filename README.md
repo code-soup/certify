@@ -1,10 +1,10 @@
 ## Certify Server [Beta]
 
-A license management and verification solution for commercial WordPress plugins.
+Automate your online business with Certify - a license management and verification solution for commercial WordPress plugins.
 
 ## Description
 
-Certify Server is a free WordPress plugin which enables you to manage licenses for your custom WordPress plugins and provides custom self-hosted plugin update repository.
+Certify is a free WordPress plugin which enables you to manage licenses for your custom WordPress plugins and provides custom self-hosted plugin update repository.
 
 ## Features
 
@@ -21,7 +21,9 @@ Certify Server is a free WordPress plugin which enables you to manage licenses f
 
 ## Setup
 
-1. Install composer package
+1. Install plugin
+2. Navigate to Certify > Software to add your software
+3. All fields are mandatory in order to
 
 ## Issues
 
