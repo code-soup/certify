@@ -13,15 +13,18 @@ class EmailCustomer {
     private $subject;
     private $body;
     private $headers;
+    private $options;
 
     public function __construct($args = []) {
+
+    	$this->options = get_option('certify_settings');
 
     	$params = wp_parse_args( $args, [
 			'recepient' => '@',
 			'subject'   => 'Email Subject',
 			'headers'   => [],
 			'mailer'    => $this,
-			'options'   => get_option('certify_settings'),
+			'options'   => $this->options,
     	]);
 		
 		$this->to      = $params['recepient'];
@@ -65,7 +68,7 @@ class EmailCustomer {
 
     public function getOption( $key = '' )
     {
-		$settings = unserialize($this->options);
+		$settings = $this->options;
 		$email    = $settings['email'];
 		$general  = $settings['general'];
 	  	$address = array(
@@ -77,14 +80,14 @@ class EmailCustomer {
 			'postcode'       => $email['postcode'],
 		);
 
-	  	if ( ! empty($key) )
+	  	if ( ! empty($key) && isset($address[$key]) )
 	  	{
 	  		return $address[ $key ];
 	  	}
 
-	  	if ( 'logo' === $key )
+	  	if ( 'email_logo' === $key )
 	  	{
-	  		return wp_get_attchment_image( $general['email_logo'], 'medium' );
+	  		return wp_get_attachment_image( $general['email_logo'], 'medium' );
 	  	}
 
 	  	return implode(', ', array_filter($address));

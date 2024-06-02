@@ -12,7 +12,7 @@ defined( 'WPINC' ) || die; ?>
                            <tr>
                                <td align="left" style="padding:0;Margin:0;width:600px">
                                    <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                       <tr>
+                                       <?php /* tr>
                                            <td align="center" style="padding:0;Margin:0;padding-top:15px;padding-bottom:15px;font-size:0">
                                                <table cellpadding="0" cellspacing="0" class="es-table-not-adapt es-social" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                                    <tr>
@@ -31,7 +31,7 @@ defined( 'WPINC' ) || die; ?>
                                                    </tr>
                                                </table>
                                            </td>
-                                       </tr>
+                                       </tr */ ?>
                                        <tr>
                                            <td align="center" style="padding:0;Margin:0;padding-bottom:35px">
                                                <p style="Margin:0;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:18px;letter-spacing:0;color:#333333;font-size:12px">

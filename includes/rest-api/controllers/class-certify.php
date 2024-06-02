@@ -1,4 +1,4 @@
- <?php
+<?php
 
 namespace CodeSoup\Certify\RestApi\Controllers;
 
@@ -102,6 +102,45 @@ class Certify {
                 ),
             )
         );
+
+        register_rest_route(
+            'certify/v1',
+            '/webhook-paddle',
+            array(
+                array(
+                    'methods'             => \WP_REST_Server::CREATABLE,
+                    'callback'            => array($this, 'handle_paddle_webhook'),
+                    'permission_callback' => '__return_true',
+                ),
+            )
+        );
+    }
+
+
+    public function handle_paddle_webhook( \WP_REST_Request $request )
+    {
+        $response = new \WP_Error(
+            'webhook-unsupported',
+            __('Sorry, this hook is not yet supported.')
+        );
+        
+        $this->log( $this->verify_paddle_signature( $request ) );
+
+        switch( $request->get_param('alert_name') )
+        {
+            case 'payment_succeeded':
+            case 'subscription_created':
+                return $this->create_license( $request );
+            break;
+
+            case 'payment_refunded':
+            case 'subscription_updated':
+            case 'subscription_cancelled':
+                return $this->update_license( $request );
+            break;
+        }
+
+        return rest_ensure_response( $response );
     }
 
 
@@ -116,6 +155,21 @@ class Certify {
 
         $license  = new License;
         $response = $license->create( $request->get_params() );
+
+        return rest_ensure_response( $response );
+    }
+
+
+    /**
+     * Generate new License key and email it to user
+     * 
+     * @param  \WP_REST_Request $request [description]
+     * @return [type]                    [description]
+     */
+    public function update_license( \WP_REST_Request $request ) {
+
+        $license  = new License;
+        $response = $license->update( $request->get_params() );
 
         return rest_ensure_response( $response );
     }
@@ -199,6 +253,36 @@ class Certify {
         }
 
         return rest_ensure_response( false );
+    }
+
+
+    /**
+     * Validate Paddle Webhook
+     * @link https://developer.paddle.com/webhooks/signature-verification
+     * 
+     * @param  \WP_REST_Request $request
+     * @return [type]                   
+     */
+    public function verify_paddle_signature( \WP_REST_Request $request ) {
+
+        // Invalid request
+        if ( empty($request->get_header('Paddle-Signature')) )
+        {
+            return false;
+        }
+
+        parse_str(str_replace(';', '&', $request->get_header('Paddle-Signature')), $sigval);
+
+        $signature = hash_hmac('sha256',
+            sprintf(
+                '%s:%s',
+                $sigval['ts'],
+                $request->get_body()
+            ),
+            $this->get_option('notification_secret_key')
+        );
+
+        return $signature === $request->get_param('p_signature');
     }
 
 

@@ -22,6 +22,33 @@ defined( 'WPINC' ) || die; ?>
 
 	<div class="row">
 		<div class="span-6">
+			<label for="certify-license-email">
+				<?php _e( 'License Email', 'certify' ); ?>
+			</label>
+			<input
+				type="email"
+				id="certify-license-email"
+				name="_certify_license_email"
+				value="<?php echo get_post_meta( $post->ID, '_certify_license_email', true ); ?>"
+				placeholder="<?php _e('Email address of license holder', 'certify'); ?>"
+			>
+		</div>
+		<div class="span-6">
+			<label for="certify-license-holder">
+				<?php _e( 'License Holder Name', 'certify' ); ?>
+			</label>
+			<input
+				type="text"
+				id="certify-license-holder"
+				name="_certify_license_holder"
+				value="<?php echo get_post_meta( $post->ID, '_certify_license_holder', true ); ?>"
+				placeholder="<?php _e('License holder name', 'certify'); ?>"
+			>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span-6">
 			<label for="certify-expiry-date">
 				<?php _e( 'Expiry Date', 'certify' ); ?>
 			</label>

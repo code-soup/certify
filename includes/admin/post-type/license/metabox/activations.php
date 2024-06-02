@@ -5,7 +5,7 @@ defined( 'WPINC' ) || die;
 
 global $post;
 
-$activations = json_decode( html_entity_decode($post->post_excerpt), true ); ?>
+$activations = json_decode( html_entity_decode($post->post_excerpt), true );  ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">

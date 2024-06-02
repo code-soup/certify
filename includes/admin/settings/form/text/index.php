@@ -4,7 +4,7 @@
 defined( 'WPINC' ) || die;
 
 printf(
-    '<input id="%s" name="certify_settings[%s][%s]" type="text" value="%s" />',
+    '<input id="%s" name="certify_settings[%s][%s]" type="text" value="%s" class="regular-text" />',
     $params['id'],
     $params['section'],
     $params['name'],

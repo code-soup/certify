@@ -15,6 +15,7 @@ defined( 'WPINC' ) || die;
 class License {
 
 	use \CodeSoup\Certify\Traits\HelpersTrait;
+	use \CodeSoup\Certify\Traits\UtilsTrait;
 
 	// Main plugin instance.
 	// protected static $instance = null;
@@ -30,7 +31,11 @@ class License {
 
 	protected $license_key;
 
+	
 	protected $license_object;
+
+
+	protected $send_new_license_email = true;
 
 
 	/**
@@ -54,60 +59,163 @@ class License {
 
 	public function create( array $array )
 	{
-		$license = $this->generateLicenseKey();
-		$post_id = wp_insert_post( array(
-            'post_title'     => sprintf('Order #%s', $array['order_id']),
+		$license  = $this->generateLicenseKey();
+		$postdata = array(
+            'post_title'     => $array['checkout_id'],
             'post_name'      => $license,
             'post_type'      => 'license',
             'post_status'    => 'private',
-            'post_content'   => wp_json_encode( $array ), // Subscription webhook data
-            'post_excerpt'   => array(), // Activations are saved here
+            'post_content'   => wp_json_encode( $array ), // Webhook data
+            'post_excerpt'   => wp_json_encode( array() ), // Activations
             'post_parent'    => $this->get_software_post_id( $array ),
             'post_author'    => $array['user_id'],
             'post_mime_type' => 'application/json',
             'meta_input'     => array(
-				'_certify_next_bill_date'  => $array['next_bill_date'], // YYYY-MM-DD
-				'_certify_external_id'     => $array['subscription_plan_id'],
-				'_certify_subscription_id' => $array['subscription_id']
+				'_certify_license_holder'  => $array['customer_name'],
+				'_certify_license_email'   => $array['email'],
             ),
-        ));
+        );
 
+
+		/**
+		 * Different data for post type based on the webhook
+		 */
+        switch( $array['alert_name'] )
+        {
+        	/**
+        	 * Fired when a new subscription is created, and a customer has successfully subscribed.
+        	 */
+        	case 'subscription_created':
+        		
+        		$order_key = 'subscription_id';
+
+        		$postdata['meta_input'] = array_merge(
+	        		$postdata['meta_input'],
+	        		array(
+						'_certify_external_id'     => $array['subscription_plan_id'],
+						'_certify_subscription_id' => $array['subscription_id'],
+						'_certify_next_bill_date'  => $array['next_bill_date'],
+	        		)
+	        	);
+
+        	break;
+
+
+        	/**
+        	 * Fired when a payment is made into your Paddle account.
+        	 */
+        	case 'payment_succeeded':
+        		
+        		$order_key = 'order_id';
+
+        		$postdata['meta_input'] = array_merge(
+	        		$postdata['meta_input'],
+	        		array(
+						'_certify_external_id' => $array['product_id'],
+						'_certify_order_id'    => $array['order_id'],
+	        		)
+	        	);
+        	break;
+        }
+
+        $post_id = wp_insert_post( $postdata );
+
+		/**
+		 * Insert
+		 */
         $this->add_log_entry([
         	'post_id' => $post_id,
         	'type'    => $array['alert_name'],
-        	'data'    => $array,
+        	'data'    => wp_json_encode( $array ),
         	'user'    => $array['customer_name'],
         ]);
 
+        
         /**
          * Send License to user via email
          */
-		$mailer = new \CodeSoup\Certify\EmailCustomer(
-			array(
-				'recepient'     => $array['email'],
-				'subject'       => sprintf('Order #%s', $array['order_id']),
-				'order_id'      => $array['order_id'],
-				'customer_name' => $array['customer_name'],
-				'license_key'   => $license,
-			),
-		);
+        if ( $this->send_new_license_email )
+        {
+        	$mailer = new \CodeSoup\Certify\EmailCustomer(
+				array(
+					'recepient'     => $array['email'],
+					'subject'       => sprintf('Order #%d', $array[ $order_key ]),
+					'order_id'      => $array[ $order_key ],
+					'customer_name' => $array['customer_name'],
+					'license_key'   => $license,
+					'order_data'    => $array
+				),
+			);
 
-		$mailer->send();
+			$mailer->send();
+        }
 
-        return [ $post_id, $license ];
+        return [ 
+        	$post_id,
+        	$license
+        ];
 	}
 
 	
 	/**
 	 * Update specific license
 	 */
-	public function update( $args = [] ) {}
+	public function update( array $array )
+	{
+		$updated = false;
+		$post    = $this->get_subscription_license_post( $array );
+
+		if ( empty($post) )
+		{
+			return $updated;
+		}
+
+		/**
+		 * Different data for post type based on the webhook
+		 */
+        switch( $array['alert_name'] )
+        {
+        	/**
+        	 * Fired when an existing subscription changes (eg. a customer changes plan via upgrade or downgrade).
+        	 */
+        	case 'subscription_updated':
+        	case 'subscription_cancelled':
+        		
+        		updated_post_meta( $post->ID, '_certify_next_bill_date', $array['cancellation_effective_date'] );
+        		$updated = true;
+        	break;
+
+       
+        	/**
+        	 * Fired when a payment is refunded.
+        	 */
+        	case 'payment_refunded':
+
+        		updated_post_meta( $post->ID, '_certify_next_bill_date', $array['event_time'] );
+        		$updated = true;
+        	break;
+        }
+
+		/**
+		 * Insert
+		 */
+        $this->add_log_entry([
+        	'post_id' => $post->ID,
+        	'type'    => $array['alert_name'],
+        	'data'    => wp_json_encode( $array ),
+        	'user'    => $array['customer_name'],
+        ]);
+
+
+        return $updated;
+	}
 
 
 	/**
 	 * Activate license for a single domain
 	 */
-	public function activate( $args = [] ) {
+	public function activate( $args = [] )
+	{
 
 		$obj     = $this->license_object;
 		$response = new \WP_Error('invalid-request', __('Something went wrong, please contact support', 'certify') );
@@ -116,10 +224,6 @@ class License {
 		{
 			return $response;
 		}
-
-		$args['host'] = 'me.zz';
-
-		error_log( print_r($obj, true) );
 
 		// Add to list
 		$updated   = []; $this->remove_activation( $args['host'], $obj['activations'] );
@@ -132,15 +236,11 @@ class License {
 			'time' => time()
 		);
 
-		// $this->log( $updated );
-
 		// Save to DB
 		wp_update_post([
 			'ID'           => $obj['id'],
 			'post_excerpt' => wp_json_encode($updated),
 		]);
-
-		// $this->log( wp_json_encode( $updated, JSON_FORCE_OBJECT ) );
 
 		// Log
 		$this->add_log_entry([
@@ -191,8 +291,8 @@ class License {
 	/**
 	 * Check if license key is valid
 	 */
-	public function validate() {
-
+	public function validate()
+	{
 		$obj = $this->license_object;
 
 		// Error Getting License Key
@@ -309,31 +409,31 @@ class License {
 
 		return array(
 			'name'           => $wp_post->post_title,
-			'slug'           => dirname($meta['_certify_plugin_slug']),
-			'path'           => $meta['_certify_plugin_slug'],
+			'slug'           => dirname( $this->get_value('_certify_plugin_slug', $meta) ),
+			'path'           => $this->get_value('_certify_plugin_slug', $meta),
 			'author'         => sprintf(
 				'<a href="%s">%s</a>',
-				$meta['_certify_author_profile_url'],
-				$meta['_certify_author_name']
+				$this->get_value('_certify_author_profile_url', $meta),
+				$this->get_value('_certify_author_name', $meta)
 			),
-			'homepage'       => $meta['_certify_homepage_url'],
-			'donate_link'    => $meta['_certify_donate_link'],
-			'author_profile' => $meta['_certify_author_profile_url'],
-			'version'        => $meta['_certify_plugin_version'],
-			'new_version'    => $meta['_certify_plugin_version'],
-			'download_url'   => $meta['_certify_plugin_download_url'],
-			'requires'       => $meta['_certify_wp_required'],
-			'tested'         => $meta['_certify_wp_tested'],
-			'requires_php'   => $meta['_certify_php_required'],
+			'homepage'       => $this->get_value('_certify_homepage_url', $meta),
+			'donate_link'    => $this->get_value('_certify_donate_link', $meta),
+			'author_profile' => $this->get_value('_certify_author_profile_url', $meta),
+			'version'        => $this->get_value('_certify_plugin_version', $meta),
+			'new_version'    => $this->get_value('_certify_plugin_version', $meta),
+			'download_url'   => $this->get_value('_certify_plugin_download_url', $meta),
+			'requires'       => $this->get_value('_certify_wp_required', $meta),
+			'tested'         => $this->get_value('_certify_wp_tested', $meta),
+			'requires_php'   => $this->get_value('_certify_php_required', $meta),
 			'last_updated'   => $wp_post->post_modified,
 		    'sections' => array(
-				'description'  => $meta['_certify_description'],
-				'installation' => $meta['_certify_installation_instructions'],
-				'changelog'    => $meta['_certify_changelog'],
+				'description'  => $this->get_value('_certify_description', $meta),
+				'installation' => $this->get_value('_certify_installation_instructions', $meta),
+				'changelog'    => $this->get_value('_certify_changelog', $meta),
 		    ),
 		    'banners' => array(
-				'low'  => $meta['_certify_banner_low'],
-				'high' => $meta['_certify_banner_high'],
+				'low'  => $this->get_value('_certify_banner_low', $meta),
+				'high' => $this->get_value('_certify_banner_high', $meta),
 		    )
 		);
 	}
@@ -352,6 +452,51 @@ class License {
 				$plan_id
 			)
 		);
+	}
+
+
+	private function get_license_post( array $array )
+	{
+		// Subscription purchase meta
+		if ( isset($array['subscription_id']) )
+		{
+			$meta_query = array(
+				array(
+					'key'    => '_certify_subscription_id',
+					'value'  => $array['subscription_id'],
+				),
+				array(
+					'key'    => '_certify_subscription_plan_id',
+					'value'  => $array['subscription_plan_id'],
+				),
+			);
+		}
+		// One off purchase
+		else
+		{
+			$meta_query = array(
+				array(
+					'key'    => '_certify_order_id',
+					'value'  => $array['order_id'],
+				)
+			);
+		}
+
+		$posts = get_posts([
+			'post_type'   => 'license',
+			'post_author' => $array['user_id'],
+			'meta_query'  => $meta_query,
+		]);
+
+		// Not found
+		if ( empty( $posts[0] ) )
+		{
+			// Log that for some reason post was not found
+			$this->log('License post request not found.' . print_r($meta_query, true) );
+			return false;
+		}
+
+		return $post[0];
 	}
 
 
