@@ -29,6 +29,7 @@ defined( 'WPINC' ) || die; ?>
 			>
 		</div>
 
+	<div class="row">
 		<div class="span-6">
 			<label for="certify-author-name">
 				<?php _e( 'Plugin homepage URL', 'certify' ); ?>
