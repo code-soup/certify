@@ -5,6 +5,37 @@ namespace CodeSoup\Certify;
 // Exit if accessed directly
 defined( 'WPINC' ) || die;
 
+/**
+ * Display errors
+ */
+if ( ! function_exists('debug_wpmail') ) :
+
+	function debug_wpmail( $result = false ) {
+
+		if ( $result )
+			return;
+
+		global $ts_mail_errors, $phpmailer;
+
+		if ( ! isset($ts_mail_errors) )
+			$ts_mail_errors = array();
+
+		if ( isset($phpmailer) )
+			$ts_mail_errors[] = $phpmailer->ErrorInfo;
+
+		print_r('<pre>');
+		print_r($ts_mail_errors);
+		print_r('</pre>');
+	}
+endif;
+
+
+/**
+ * Usage
+ */
+// $res = wp_mail($to, $subject, $message);
+// 
+
 class EmailCustomer {
 
 	use Traits\HelpersTrait;
@@ -63,7 +94,11 @@ class EmailCustomer {
             return false;
         }
 
-        return wp_mail($this->to, $this->subject, $this->body, $this->headers);
+        $res = wp_mail($this->to, $this->subject, $this->body, $this->headers);
+
+        debug_wpmail($res); // Will print_r array of errors
+
+        return $res;
     }
 
     public function getOption( $key = '' )

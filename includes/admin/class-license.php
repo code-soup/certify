@@ -39,11 +39,17 @@ class License {
 
 
 	/**
+	 * Additional request params passed when activate/deactivate/
+	 * @var [type]
+	 */
+	protected $request_params;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct( string $license_key = '' )
+	public function __construct( string $license_key = '', array $params = [] )
 	{
 		// Main plugin instance.
 		// $instance     = \CodeSoup\Certify\Init::get_instance();
@@ -53,7 +59,10 @@ class License {
 		if ( ! empty($license_key) )
 		{
 			$this->license_key    = sanitize_text_field( $license_key );
+			$this->request_params = $params;
 			$this->license_object = $this->get_license_object( $this->license_key );
+
+			$this->log( $params );
 		}
 	}
 
@@ -220,7 +229,7 @@ class License {
 		$obj     = $this->license_object;
 		$response = new \WP_Error('invalid-request', __('Something went wrong, please contact support', 'certify') );
 
-		if ( empty($args['host']) || is_wp_error( $obj) )
+		if ( empty($args['host']) || is_wp_error( $obj ) )
 		{
 			return $response;
 		}
@@ -291,7 +300,7 @@ class License {
 	/**
 	 * Check if license key is valid
 	 */
-	public function validate()
+	public function validate( array $args = [] )
 	{
 		$obj = $this->license_object;
 
@@ -305,8 +314,11 @@ class License {
 		}
 
 		return array(
-			'valid'  => $obj['can_update'],
-			'expiry' => strtotime($obj['next_bill_date']),
+			'valid'         => $obj['can_update'],
+			'expiry'        => $obj['next_bill_date'],
+			'purchase_date' => $obj['purchase_date'],
+			'activations'   => sprintf('%d of %d', count($obj['activations']), $obj['activations_limit']),
+			'all'           => (array) $this->license_object,
 		);
 	}
 
@@ -354,13 +366,18 @@ class License {
 		{
 			return $response;
 		}
+
+		$paddle_data   = json_decode($post['post_content'], true);
+		$purchase_date = \DateTime::createFromFormat('Y-m-d H:i:s', $paddle_data['event_time']);
+		$expiry_date   = \DateTime::createFromFormat('Y-m-d', $paddle_data['next_bill_date']);
 		
 		$data = array(
 			'id'                => $post['ID'],
 			'plugin_post_id'    => $post['post_parent'],
 			'plugin_name'       => get_the_title( $post['post_parent'] ),
 			'subscription_id'   => intval( get_post_meta( $post['ID'], '_certify_subscription_id', true ) ),
-			'next_bill_date'    => get_post_meta( $post['ID'], '_certify_next_bill_date', true ),
+			'purchase_date'     => $purchase_date->format('M j, Y'),
+			'next_bill_date'    => $expiry_date->format('M j, Y'),
 			'external_id'       => intval( get_post_meta( $post['ID'], '_certify_external_id', true ) ),
 			'activations_limit' => intval( get_post_meta( $post['post_parent'], '_certify_activations_limit', true ) ),
 			'days_left'         => 0,
@@ -379,9 +396,8 @@ class License {
 		// How many days left
 		if ( ! empty($data['next_bill_date']) )
 		{
-			$date     = \DateTime::createFromFormat('Y-m-d', $data['next_bill_date']);
 			$now      = new \DateTime('now');
-			$interval = $now->diff($date);
+			$interval = $now->diff($expiry_date);
 
 			$data['days_left'] = max(0, $interval->days);
 		}

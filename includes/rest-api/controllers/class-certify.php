@@ -186,7 +186,7 @@ class Certify {
         if ( ! empty($request->get_param('license_key')) )
         {
             $license  = new License( $request->get_param('license_key') );
-            $response = $license->validate();
+            $response = $license->validate( $request->get_params() );
 
             return rest_ensure_response( $response );
         }
@@ -204,15 +204,13 @@ class Certify {
     {   
         if ( ! empty($request->get_param('license_key')) )
         {
-            $license  = new License($request->get_param('license_key') );
-            $response = $license->activate([
-                'host' => $request->get_header('host')
-            ]);
+            $license  = new License($request->get_param('license_key'), $request->get_params() );
+            $response = $license->activate( $request->get_params() );
 
             return rest_ensure_response( $response );
         }
 
-        return rest_ensure_response( false );
+        return rest_ensure_response( $request->get_param('license_key') );
     }
 
     /**
@@ -226,9 +224,7 @@ class Certify {
         if ( ! empty($request->get_param('license_key')) )
         {
             $license  = new License( $request->get_param('license_key') );
-            $response = $license->deactivate([
-                'host' => $request->get_header('host')
-            ]);
+            $response = $license->deactivate( $request->get_params() );
 
             return rest_ensure_response( $response );
         }
@@ -296,6 +292,31 @@ class Certify {
         $params['license_key'] = array(
             'default'           => '',
             'description'       => __( 'License Key', 'certify' ),
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_text_field',
+            'validate_callback' => 'rest_validate_request_arg',
+        );
+
+        $params['home_url'] = array(
+            'default'           => '',
+            'description'       => __( 'Home URL from WP being activated or deactivated', 'certify' ),
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_url',
+            'validate_callback' => 'rest_validate_request_arg',
+        );
+
+
+        $params['plugin_id'] = array(
+            'default'           => '',
+            'description'       => __( 'Plugin slug', 'certify' ),
+            'type'              => 'string',
+            'sanitize_callback' => 'sanitize_title',
+            'validate_callback' => 'rest_validate_request_arg',
+        );
+
+        $params['plugin_version'] = array(
+            'default'           => '',
+            'description'       => __( 'Plugin Version', 'certify' ),
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_text_field',
             'validate_callback' => 'rest_validate_request_arg',
