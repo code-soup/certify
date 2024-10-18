@@ -1,9 +1,7 @@
 <?php
 
 // Exit if accessed directly
-defined( 'WPINC' ) || die;
-
-$software = new \WP_Query(['post_type' => 'software', 'posts_per_page' => 99 ] ); ?>
+defined( 'WPINC' ) || die; ?>
 
 <div class="certify metabox-code-soup">
 	<div class="row">
