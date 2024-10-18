@@ -96,8 +96,6 @@ class EmailCustomer {
 
         $res = wp_mail($this->to, $this->subject, $this->body, $this->headers);
 
-        debug_wpmail($res); // Will print_r array of errors
-
         return $res;
     }
 

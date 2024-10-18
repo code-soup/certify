@@ -73,6 +73,8 @@ return function( $post_id, $parent ) {
 		}
 
 		update_post_meta( $post_id, '_certify_next_bill_date', $_postdata['_certify_next_bill_date'] );
+		update_post_meta( $post_id, '_certify_license_email', $_postdata['_certify_license_email'] );
+		update_post_meta( $post_id, '_certify_license_holder', $_postdata['_certify_license_holder'] );
 	}
 
 	// Shared data
