@@ -235,13 +235,10 @@ class License {
 		}
 
 		// Add to list
-		$updated   = []; $this->remove_activation( $args['host'], $obj['activations'] );
+		$url       = parse_url( $args['host'] );
+		$updated   = []; $this->remove_activation( $url['host'], $obj['activations'] );
 		$updated[] = array(
-			'host' => $args['host'],
-			'time' => time()
-		);
-		$updated[] = array(
-			'host' => $args['host'],
+			'host' => $url['host'],
 			'time' => time()
 		);
 
@@ -305,7 +302,7 @@ class License {
 		$obj = $this->license_object;
 
 		// Error Getting License Key
-		if ( is_wp_error( $obj ) )
+		if ( is_wp_error( $obj ) || empty($args['host']) )
 		{
 			return array(
 				'valid'  => false,
@@ -315,10 +312,11 @@ class License {
 
 		return array(
 			'valid'         => $obj['can_update'],
+			'active'        => $this->is_active_for_host( $args['host'], $obj['activations']),
 			'expiry'        => $obj['next_bill_date'],
 			'purchase_date' => $obj['purchase_date'],
 			'activations'   => sprintf('%d of %d', count($obj['activations']), $obj['activations_limit']),
-			'all'           => (array) $this->license_object,
+			'all'           => $obj,
 		);
 	}
 
@@ -386,9 +384,9 @@ class License {
 		);
 
 		// Current activations
-		$data['activations'] = empty($post->post_excerpt)
+		$data['activations'] = empty($post['post_excerpt'])
 			? array()
-			: (array) json_decode($post->post_excerpt, true);
+			: (array) json_decode($post['post_excerpt'], true);
 
 		// Calculate availability
 		$data['activations_available'] = max(0, ( intval($data['activations_limit']) - count( $data['activations'] )) );
@@ -541,6 +539,29 @@ class License {
         }
     	
     	return $updated;
+	}
+
+	/**
+	 * Remove activation if exists from all current activations
+	 */
+	private function is_active_for_host( string $new_host = '', array $activations = [] )
+	{
+		$url = parse_url( $new_host );
+
+	    foreach ($activations as $key => $activation)
+	    {
+        	if ( ! is_array($activation))
+        	{
+        		continue;
+        	}
+
+        	if ( $activation['host'] === $url['host'] )
+        	{
+        		return true;
+        	}
+        }
+    	
+    	return false;
 	}
 
 

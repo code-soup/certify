@@ -210,7 +210,7 @@ class Certify {
             return rest_ensure_response( $response );
         }
 
-        return rest_ensure_response( $request->get_param('license_key') );
+        return rest_ensure_response( false );
     }
 
     /**
